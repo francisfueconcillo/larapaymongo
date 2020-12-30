@@ -2,8 +2,7 @@
     This is an example Purchase Page View. 
     Create your own view based from this file.
 
-    DO NOT USE THIS VIEW IN PRODUCTION.
-    Any modifications here will be overwritten when LaraPaymongo library is updated.
+    This controller will be available in local enviroment only. APP_ENV=local
 */ ?> 
 
 @extends('layouts.app')

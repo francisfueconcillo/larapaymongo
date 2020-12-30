@@ -10,8 +10,8 @@ use Luigel\Paymongo\Facades\Paymongo;
     This is an example Purchase Page Controller. 
     Create your own controller based from this file.
 
-    DO NOT USE THIS CONTROLLER FOR PRODUCTION.
-    Any modifications here will be overwritten when LaraPaymongo library is updated.
+    This controller will be available in local enviroment only. APP_ENV=local
+    
 */
 
 class SamplePurchaseController extends Controller

@@ -28,7 +28,7 @@ class LaraPaymongoServiceProvider extends ServiceProvider
             __DIR__ . '/resources/js/components' => resource_path('js/components'),
         ], 'vue-components');
 
-        if (env('LARAPAYMONGO_TEST') == '1') {
+        if (env('APP_ENV') == 'local') {
             $this->loadRoutesFrom(__DIR__.'/routes.php');
             $this->loadViewsFrom(__DIR__.'/resources/views', 'larapaymongo');
         }
