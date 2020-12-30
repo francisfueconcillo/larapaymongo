@@ -58,6 +58,9 @@ class SamplePurchaseController extends Controller
             'description' => $itemShortDesc,
             'statement_descriptor' => env('PAYMONGO_STATEMENT_DESCRIPTOR', 'LaraPaymongo'),
             'currency' => $item['currency'],  // PayMongo only support PHP at the moment
+            'metadata' => [
+                'itemid' => $id
+            ],
         ]);
         
         return view('larapaymongo::samplepurchase', [ 
