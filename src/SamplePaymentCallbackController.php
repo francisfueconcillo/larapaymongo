@@ -11,7 +11,8 @@ class SamplePaymentCallbackController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        // IMPORTANT: Enable authentication in main app. Don't comment-out in the next line.
+        // $this->middleware('auth');
     }
 
 

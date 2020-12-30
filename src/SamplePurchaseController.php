@@ -20,7 +20,7 @@ class SamplePurchaseController extends Controller
     
     public function __construct()
     {
-        // it is recommended to secure this page with authentication
+        // IMPORTANT: Enable authentication in main app. Don't comment-out in the next line.
         // $this->middleware('auth');  
     }
 
