@@ -35,10 +35,11 @@ GrabPay Payment Form (not yet implemented)
 
 ## Installation
 ```
-composer require peppertech/larapaymongo "^0.1.8" 
+composer require peppertech/larapaymongo "0.1.*" 
 composer dump-autoload
-php artisan vendor:publish --tags="vue-components"
+php artisan vendor:publish --tag="vue-components"
 ```
+Note:
 
 ## Configuration
 - Set the following environment variables
