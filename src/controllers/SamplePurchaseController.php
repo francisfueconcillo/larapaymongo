@@ -1,6 +1,6 @@
 <?php
 
-namespace PepperTech\LaraPaymongo;
+namespace PepperTech\LaraPaymongo\Controllers;
 
 use Illuminate\Http\Request;
 use Luigel\Paymongo\Facades\Paymongo;

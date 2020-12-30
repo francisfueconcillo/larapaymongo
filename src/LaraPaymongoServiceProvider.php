@@ -13,7 +13,7 @@ class LaraPaymongoServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->make('PepperTech\LaraPaymongo\SamplePurchaseController');
+        $this->app->make('PepperTech\LaraPaymongo\Controllers\SamplePurchaseController');
     }
 
     /**
