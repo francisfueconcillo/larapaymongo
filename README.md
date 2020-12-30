@@ -2,7 +2,6 @@
 
 LaraPaymongo is a [PayMongo](https://paymongo.com) integration with Laravel.
 
-
 ## What the library can do
 - Do provide Vue Components that can be used in a Laravel blade view template of the main app.
 - Do Handle frontend and backend calls to PayMongo APIs
@@ -10,27 +9,6 @@ LaraPaymongo is a [PayMongo](https://paymongo.com) integration with Laravel.
 
 ## What the library won't do
 - Won't provide e-commerce functionalities like Shopping Cart, Order management, Item Inventory management. This should be handled by the main app.
-
-
-## Available Vue Components
-### larapay-btn
-Purchase Button. Clicking this button will redirect user to /purchase/<itemid>. The route, view and controller for the Purchase Page must be created in the main app. Check [Implementation Section](#implementation)
-```
-<larapay-btn itemid="{{ $itemId }}"></larapay-btn>
-```
-where `itemid` is the Item ID to purchase. This can also be an Order ID, where 
-
-### larapay-card
-Credit/Debit Card Payment Form.
-```
-<larapay-card clientkey="{{ $clientKey }}"></larapay-card>
-```
-where `clientkey` is the PayMongo [Payment Intent](https://developers.paymongo.com/reference#retrieve-a-paymentintent) client_key. 
-
-### larapay-gcash
-GCash Payment Form (not yet implemented)
-### larapay-grab
-GrabPay Payment Form (not yet implemented)
 
 
 ## Installation
@@ -56,13 +34,44 @@ PAYMONGO_WEBHOOK_SIG | NO for now | PayMongo Webhook Signature. This should be d
 
 
 ## Implementation
-- Create a Route for Purchase Page at [your project url]/purchase/[item-id]
-- Create a View for Purchase Page based from `src/views/samplepurchase.blade.php` file of this package
+- Create a Route for Purchase Page at `/purchase/[item-id]`
+- Create a View for Purchase Page based from `src/resources/views/samplepurchase.blade.php` file of this package
 - Create a Controller for Purchase Page based from `src/SamplePurchaseController.php` file of this package
+- Create a Route for Payment Callback API endpoint (GET) at `/api/paymentcallback/[Payment Intent id]`. Set this as `MIX_PAYMENT_CALLBACK_URL` env variable.
+- Create a Controller for for Payment Callback API endpoint based from `src/SamplePaymentCallbackController.php` file of this package
+
+## Available Vue Components
+Vue Components are copied from this package to your app in `resources/js/components`.
+
+IMPORTANT: Don't modify the `Larapay*.vue` and JS files inside `PayMongo/` directory from the main app. Any changes will be over-written when the library updates by composer. Changes should be made only to this repository and published to [Packgist](https://packagist.org/packages/peppertech/larapaymongo).
+### larapay-btn
+Purchase Button. Clicking this button will redirect user to /purchase/<itemid>. The route, view and controller for the Purchase Page must be created in the main app. Check [Implementation Section](#implementation)
+```
+<larapay-btn itemid="{{ $itemId }}"></larapay-btn>
+```
+where `itemid` is the Item ID to purchase. This can also be an Order ID, where 
+
+### larapay-card
+Credit/Debit Card Payment Form.
+```
+<larapay-card clientkey="{{ $clientKey }}"></larapay-card>
+```
+where `clientkey` is the PayMongo [Payment Intent](https://developers.paymongo.com/reference#retrieve-a-paymentintent) client_key. 
+
+### larapay-gcash
+GCash Payment Form (not yet implemented)
+### larapay-grab
+GrabPay Payment Form (not yet implemented)
+
+
 
 
 ## Testing
 
-Go to URL path [your project url]/samplepurchase/1 . A Sample Purchase Page should appear.
+Sample Purchase Page with the Payment Callback API Endpoint should be available when default values `APP_ENV=local` and  `MIX_PAYMENT_CALLBACK_URL` is set to default value.
+
+Go to URL path [your project `url]/samplepurchase/1` . A Sample Purchase Page should appear. After successfull payment GET request to `MIX_PAYMENT_CALLBACK_URL` is called.
+
+Use the Test Credit Card numbers from [PayMongo Testing](https://developers.paymongo.com/docs/testing)
 
 
