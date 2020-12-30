@@ -45,11 +45,11 @@ Vue Components are copied from this package to your app in `resources/js/compone
 
 IMPORTANT: Don't modify the `Larapay*.vue` and JS files inside `PayMongo/` directory from the main app. Any changes will be over-written when the library updates by composer. Changes should be made only to this repository and published to [Packgist](https://packagist.org/packages/peppertech/larapaymongo).
 ### larapay-btn
-Purchase Button. Clicking this button will redirect user to /purchase/<itemid>. The route, view and controller for the Purchase Page must be created in the main app. Check [Implementation Section](#implementation)
+Purchase Button. Clicking this button will redirect user to `/purchase/<itemid>`. The route, view and controller for the Purchase Page must be created in the main app. Check [Implementation Section](#implementation)
 ```
 <larapay-btn itemid="{{ $itemId }}"></larapay-btn>
 ```
-where `itemid` is the Item ID to purchase. This can also be an Order ID, where 
+where `itemid` is the Item ID to purchase. This can also be an Order ID, where multiple items can be in one order, like in most e-commerce implementations.
 
 ### larapay-card
 Credit/Debit Card Payment Form.
