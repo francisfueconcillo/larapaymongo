@@ -13,7 +13,7 @@ class LaraPaymongoServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->make('PepperTech\LaraPaymongo\SamplePurchaseController');
     }
 
     /**
@@ -30,7 +30,7 @@ class LaraPaymongoServiceProvider extends ServiceProvider
 
         if (env('LARAPAYMONGO_TEST') == '1') {
             $this->loadRoutesFrom(__DIR__.'/routes.php');
-            $this->loadViewsFrom(__DIR__.'/resources', 'larapaymongo');
+            $this->loadViewsFrom(__DIR__.'/resources/views', 'larapaymongo');
         }
     }
 }

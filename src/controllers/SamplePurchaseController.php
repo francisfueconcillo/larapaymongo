@@ -13,7 +13,7 @@ use Luigel\Paymongo\Facades\Paymongo;
     Any modifications here will be overwritten when LaraPaymongo library is updated.
 */
 
-class Purchase extends Controller
+class SamplePurchaseController extends Controller
 {
     
     public function __construct()
