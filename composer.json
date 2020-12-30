@@ -15,7 +15,14 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "PepperTech\\LaraPaymongo\\": "src/"
+            "PepperTech\\LaraPaymongo\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "PepperTech\\LaraPaymongo\\LaraPaymongoServiceProvider"
+            ]
         }
     }
 }
