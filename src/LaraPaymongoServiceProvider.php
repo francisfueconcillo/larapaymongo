@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace PepperTech\LaraPaymongo;
 
 use Illuminate\Support\ServiceProvider;
 
