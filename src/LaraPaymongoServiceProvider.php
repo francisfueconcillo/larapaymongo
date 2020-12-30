@@ -24,7 +24,7 @@ class LaraPaymongoServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([ 
-            __DIR__ . '/resources/js/components/*' => resource_path('js/components'),
+            __DIR__ . '/resources/js/components' => resource_path('js/components'),
         ], 'vue-components');
     }
 }

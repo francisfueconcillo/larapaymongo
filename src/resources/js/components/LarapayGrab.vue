@@ -10,8 +10,6 @@
 
 <script>
     export default {
-  watch: {
-  },
         props: {
             price: { type: String, required: true },
             currency: { type: String, required: true },
