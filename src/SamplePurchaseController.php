@@ -33,7 +33,7 @@ class SamplePurchaseController extends Controller
 
         $item = [
             'id' => $id,
-            'name' => 'Sample Product 1',
+            'name' => 'Sample Product '.$id,
             'description' => 'A very cool product',
             'price' => 100,
             'currency' => 'PHP',
