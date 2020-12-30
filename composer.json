@@ -1,0 +1,21 @@
+{
+    "name": "peppertech/larapaymongo",
+    "description": "Laravel-Paymongo Payment Integration",
+    "type": "library",
+    "require": {
+        "luigel/laravel-paymongo": "^1.3"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Francis Fueconcillo",
+            "email": "francisfueconcillo@icloud.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "PepperTech\\LaraPaymongo\\": "src/"
+        }
+    }
+}
