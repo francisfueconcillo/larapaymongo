@@ -17,5 +17,12 @@
         "psr-4": {
             "PepperTech\\LaraPaymongo\\": "src/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "PepperTech\\LaraPaymongo\\LaraPaymongoServiceProvider"
+            ]
+        }
     }
 }
