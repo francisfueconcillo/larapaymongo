@@ -1,5 +1,6 @@
 <?php
 
+// Change this namespace `App\Http\Controllers` when implementing in main app
 namespace PepperTech\LaraPaymongo;
 
 use App\Http\Controllers\Controller;

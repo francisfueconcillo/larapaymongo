@@ -104,6 +104,7 @@
 <script>
     import PaymentMethod from './PayMongo/PaymentMethod';
     import PaymentIntent from './PayMongo/PaymentIntent';
+    import LarapayCallback from './LarapayCallback';
     export default {
         props: {
             clientkey: { type: String, required: true },
@@ -152,7 +153,8 @@
         watch: {
             status() {
                 if (this.status === 'success') {
-                    // TODO - call backend success url  
+                    // call backend for further actions on the item/order 
+                    LarapayCallback.verify(this.clientkey);
                 }
             }
         },

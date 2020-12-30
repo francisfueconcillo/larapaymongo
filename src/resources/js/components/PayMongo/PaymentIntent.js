@@ -1,5 +1,3 @@
-import { create } from "lodash";
-
 const PAYMONGO_API = process.env.MIX_PAYMONGO_API_URL || 'https://api.paymongo.com/v1';
 const PAYMONGO_PUBLIC_KEY = process.env.MIX_PAYMONGO_PUBLIC_KEY;
 const PROCESSING_TIMEOUT = 2000;
