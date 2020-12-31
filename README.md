@@ -13,7 +13,7 @@ LaraPaymongo is a [PayMongo](https://paymongo.com) integration with Laravel.
 
 ## Installation
 ```
-composer require peppertech/larapaymongo "0.1.*" 
+composer require peppertech/larapaymongo "^0.1" 
 composer dump-autoload
 php artisan vendor:publish --tag="vue-components"
 ```
