@@ -1,4 +1,4 @@
-const PAYMENT_CALLBACK_URL = process.env.MIX_PAYMENT_CALLBACK_URL || '/api/paymentcallback';
+const PAYMENT_CALLBACK_URL = process.env.MIX_PAYMENT_VERIFY_URL || '/payment/verify';
 
 export default {
   verify(clientKey) {

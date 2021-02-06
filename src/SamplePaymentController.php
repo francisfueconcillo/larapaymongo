@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * This is an example PaymentController.
+ * Create your own controller based from this file.
+ *
+ * This controller will be available when APP_ENV=local
+ */
+
+// CHANGE HERE
 // Change this namespace `App\Http\Controllers` when implementing in main app
 namespace PepperTech\LaraPaymongo;
 
@@ -7,21 +15,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Luigel\Paymongo\Facades\Paymongo;
 
-/* 
-    This is an example Purchase Page Controller. 
-    Create your own controller based from this file.
-
-    This controller will be available in local enviroment only. APP_ENV=local
-    
-*/
-
-class SamplePurchaseController extends Controller
+class SamplePaymentController extends Controller
 {
-    
+    private $config;
+
     public function __construct()
     {
-        // IMPORTANT: Enable authentication in main app. Don't comment-out in the next line.
-        // $this->middleware('auth');  
+        $this->config = config('larapaymongo');
     }
 
     public function index($id)
@@ -56,14 +56,14 @@ class SamplePurchaseController extends Controller
                 ]
             ],
             'description' => $itemShortDesc,
-            'statement_descriptor' => env('PAYMONGO_STATEMENT_DESCRIPTOR', 'LaraPaymongo'),
-            'currency' => $item['currency'],  // PayMongo only support PHP at the moment
+            'statement_descriptor' => $this->config['statement_descriptor'],
+            'currency' => 'PHP',  // PayMongo only support PHP at the moment
             'metadata' => [
-                'itemid' => $id
+                'reference_id' => $id
             ],
         ]);
         
-        return view('larapaymongo::samplepurchase', [ 
+        return view('larapaymongo::samplepayment', [ 
             'name' => $item['name'],
             'description' => $item['description'],
             'currency' => $item['currency'],
