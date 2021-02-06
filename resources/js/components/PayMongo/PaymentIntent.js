@@ -143,7 +143,7 @@ export default {
 
         parentComponent.errors = errorMessages;
         parentComponent.status = 'fail';
-        Promise.reject(new Error(errorMessages));
+        Promise.reject(new Error('Multiple errors.'));
       }
     });
     

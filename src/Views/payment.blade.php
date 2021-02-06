@@ -15,6 +15,7 @@
       <div class="card">
           <div class="card-header">Product Purchase</div>
           <div class="card-body">
+              Reference ID: {{ $id }}<br/>
               {{ $name }}<br/>
               {{ $description }}<br/>
               Status: {{ $status }}<br/><br/>

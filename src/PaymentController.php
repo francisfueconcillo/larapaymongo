@@ -67,7 +67,6 @@ class PaymentController extends Controller
                 'price' => strval(number_format($transaction['price'], 2)),
                 'status' => strtoupper($transaction['status']),
                 'client_key' => $paymentIntent->client_key,
-                'source_id' => $transaction['source_id'],
             ]);
         }
 

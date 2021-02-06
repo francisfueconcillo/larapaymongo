@@ -91,7 +91,7 @@
                 <larapay-notify :status="status" :errors="errors"></larapay-notify>
             </div>
 
-             <div class="p-3">
+            <div class="p-3">
                 <larapay-3ds v-if="show3dsModal" :url3ds="url3ds"></larapay-3ds>
             </div>
             

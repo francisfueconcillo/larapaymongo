@@ -1,4 +1,4 @@
-const PAYMENT_CALLBACK_URL = process.env.MIX_PAYMENT_VERIFY_URL || '/payment/verify';
+const PAYMENT_VERIFY_URL = '/payment/verify';
 
 export default {
   verify(clientKey) {
@@ -6,7 +6,7 @@ export default {
     // Get the payment intent id from the client key
     const paymentIntentId = clientKey.split('_client')[0];
     
-    axios.get(PAYMENT_CALLBACK_URL + '/' + paymentIntentId).then(response => {
+    axios.get(PAYMENT_VERIFY_URL + '/' + paymentIntentId).then(response => {
       const resp = response.data.data;
       console.log(resp);
       if (response.status === 200 && !resp.success) {

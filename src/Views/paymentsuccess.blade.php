@@ -13,8 +13,9 @@
     <div class="col-md-7 col-xs-11">
 
       <div class="card">
-          <div class="card-header">Payment is done.</div>
+          <div class="card-header">Transaction Details</div>
           <div class="card-body">
+              Reference ID: {{ $id }}<br/>
               {{ $name }}<br/>
               {{ $description }}<br/>
               Status: {{ $status }}<br/><br/>

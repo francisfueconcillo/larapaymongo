@@ -9,7 +9,7 @@ use Luigel\Paymongo\Facades\Paymongo;
 use PepperTech\LaraPaymongo\Exceptions\InvalidParameterException;
 use PepperTech\LaraPaymongo\Exceptions\FatalErrorException;
 
-class PaymentCallbackController extends Controller
+class PaymentDetailsController extends Controller
 {
     private $config;
     
@@ -52,7 +52,7 @@ class PaymentCallbackController extends Controller
                     'description' => ucfirst($source->type).' Payment - Ref# '.$referId,
                     'statement_descriptor' => $this->config['statement_descriptor'],
                     'source' => [
-                        'id' => $referId,
+                        'id' => $source->id,
                         'type' => 'source'
                     ]
                 ]);
@@ -64,9 +64,36 @@ class PaymentCallbackController extends Controller
                     return $failView;
                 }
 
-            } else if ($source->status == 'expired') {
-                return $failView;
-            }
+            } else if ($source->status == 'expired' || $source->status == 'cancelled') {
+                $paymentIntent = Paymongo::paymentIntent()->create([
+                    'amount' => number_format($transaction['price'], 2),  // Amount in cents. https://developers.paymongo.com/reference#create-a-paymentintent
+                    'payment_method_allowed' => [
+                        'card'
+                    ],
+                    'payment_method_options' => [
+                        'card' => [
+                            'request_three_d_secure' => 'automatic'
+                        ]
+                    ],
+                    'description' => $transaction['name'],
+                    'statement_descriptor' => $this->config['statement_descriptor'],
+                    'currency' => 'PHP',  // PayMongo only support PHP at the moment
+                    'metadata' => [
+                        'reference_id' => $referId
+                    ],
+                ]);
+
+                return view('larapaymongo::paymentfail', [ 
+                    'id' => $transaction['id'],
+                    'name' => $transaction['name'],
+                    'description' => $transaction['description'],
+                    'currency' => $transaction['currency'],
+                    'price' => strval(number_format($transaction['price'], 2)),
+                    'status' => strtoupper($transaction['status']),
+                    'client_key' => $paymentIntent->client_key,
+                ]);
+               
+            } 
 
             return $failView;
 

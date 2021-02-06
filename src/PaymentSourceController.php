@@ -32,8 +32,8 @@ class PaymentSourceController extends Controller
             throw new InvalidParameterException('Invalid parameters.');
         }
 
-        $transation = LaraPaymongoIntegrator::getTransactionDetails($referId);
-        $sourceId = $transation['source_id'];
+        $transaction = LaraPaymongoIntegrator::getTransactionDetails($referId);
+        $sourceId = $transaction['source_id'];
         
         if ($sourceId !== null) {
             $currentSource = Paymongo::source()->find($sourceId);
@@ -64,6 +64,10 @@ class PaymentSourceController extends Controller
                         'code' => 'paid',
                     ]);
                 }
+            } else if($currentSource->status === 'paid') {
+                return json_encode([
+                    'code' => 'paid',
+                ]);
             }
 
         } 
@@ -74,17 +78,18 @@ class PaymentSourceController extends Controller
             'amount' => number_format($transaction['price'], 2),
             'currency' => 'PHP',
             'redirect' => [
-                'success' => config('app')['url'].$this->config['callback_url'].'/success/'.$referId,
-                'failed' => config('app')['url'].$this->config['callback_url'].'/fail/'.$referId,
+                'success' => config('app.url').'/payment/details/'.$referId,
+                'failed' => config('app.url').'/payment/details/'.$referId,
             ]
         ]);
+        $sourceAttr = $source->getAttributes();
 
-        LaraPaymongoIntegrator::updateTransactionSourceId($referId, $source->id);
+        LaraPaymongoIntegrator::updateTransactionSourceId($referId, $sourceAttr['id']);
         
         return json_encode([
             'code' => 'new',
-            'id' => $source->id,
-            'checkout_url' => $source->attributes->redirect->checkout_url,
+            'id' => $sourceAttr['id'],
+            'checkout_url' => $sourceAttr['redirect']['checkout_url'],
         ]);
        
     }
