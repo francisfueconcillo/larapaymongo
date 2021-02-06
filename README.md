@@ -26,7 +26,7 @@ Variable | Required | Description | Default Value
 --- | --- | --- | ---
 MIX_PAYMONGO_API_URL | Yes | PayMongo API URL | https://api.paymongo.com/v1
 MIX_PAYMONGO_PUBLIC_KEY | Yes | PayMongo Public Key. Values for Test or Live will be provided. | none
-MIX_PAYMENT_VERIFY_URL | Yes | MUST CHANGE THIS! Callback URL to be called when payment is successful, to perform more backend task like closing an order or sending payment confirmation by email to customer | `/sample/payment/verify` (this default endpoint is only available when `APP_ENV=local`)
+MIX_PAYMENT_VERIFY_URL | Yes | MUST CHANGE THIS! Callback URL to be called when payment is successful, to perform more backend task like closing an order or sending payment confirmation by email to customer | `/payment/verify` (this default endpoint is only available when `APP_ENV=local`)
 PAYMONGO_STATEMENT_DESCRIPTOR | Yes | The string that will appear on customer Billing Statement. This should be different per project. | none
 PAYMONGO_SECRET_KEY | Yes | PayMongo Secret Key. Values for Test or Live will be provided. | none
 PAYMONGO_PUBLIC_KEY | Yes | PayMongo Public Key. same as MIX_PAYMONGO_PUBLIC_KEY | none

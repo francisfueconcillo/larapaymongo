@@ -1,15 +1,5 @@
 <?php
 
-/**
- * This is an example PaymentCallbackController.
- * Create your own controller based from this file.
- *
- * This controller will be available when APP_ENV=local
- */
-
-
-// CHANGE HERE
-// Change this namespace `App\Http\Controllers` when implementing in main app
 namespace PepperTech\LaraPaymongo;
 
 use App\Http\Controllers\Controller;
@@ -19,7 +9,7 @@ use Luigel\Paymongo\Facades\Paymongo;
 use PepperTech\LaraPaymongo\Exceptions\InvalidParameterException;
 use PepperTech\LaraPaymongo\Exceptions\FatalErrorException;
 
-class SamplePaymentCallbackController extends Controller
+class PaymentCallbackController extends Controller
 {
     private $config;
     
@@ -49,8 +39,8 @@ class SamplePaymentCallbackController extends Controller
             throw new FatalErrorException('Source ID is expected but is not found.');
         }
 
-        $failView = view('larapaymongo::samplepaymentfail', $transaction);
-        $successView = view('larapaymongo::samplepaymentsuccess', $transaction);
+        $failView = view('larapaymongo::paymentfail', $transaction);
+        $successView = view('larapaymongo::paymentsuccess', $transaction);
 
         if ($transaction['status'] === 'unpaid') {
             $source = Paymongo::source()->find($transaction['source_id']);

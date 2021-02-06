@@ -1,15 +1,5 @@
 <?php
 
-/**
- * This is an example PaymentSourceController.
- * Create your own controller based from this file.
- *
- * This controller will be available when APP_ENV=local
- */
-
-
-// CHANGE HERE
-// Change this namespace `App\Http\Controllers` when implementing in main app
 namespace PepperTech\LaraPaymongo;
 
 use App\Http\Controllers\Controller;
@@ -18,7 +8,7 @@ use Illuminate\Http\Request;
 use Luigel\Paymongo\Facades\Paymongo;
 use PepperTech\LaraPaymongo\Exceptions\InvalidParameterException;
 
-class SamplePaymentSourceController extends Controller
+class PaymentSourceController extends Controller
 {
     private $config;
 

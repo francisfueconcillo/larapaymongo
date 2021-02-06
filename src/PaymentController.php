@@ -1,14 +1,5 @@
 <?php
 
-/**
- * This is an example PaymentController.
- * Create your own controller based from this file.
- *
- * This controller will be available when APP_ENV=local
- */
-
-// CHANGE HERE
-// Change this namespace `App\Http\Controllers` when implementing in main app
 namespace PepperTech\LaraPaymongo;
 
 use App\Http\Controllers\Controller;
@@ -17,7 +8,7 @@ use Illuminate\Http\Request;
 use Luigel\Paymongo\Facades\Paymongo;
 use PepperTech\LaraPaymongo\Exceptions\InvalidParameterException;
 
-class SamplePaymentController extends Controller
+class PaymentController extends Controller
 {
     private $config;
 
@@ -41,7 +32,7 @@ class SamplePaymentController extends Controller
         }
 
         if ($transaction['status'] === 'paid') {
-            return view('larapaymongo::samplepaymentsuccess', [ 
+            return view('larapaymongo::paymentsuccess', [ 
                 'name' => $transaction['name'],
                 'description' => $transaction['description'],
                 'currency' => $transaction['currency'],
@@ -68,7 +59,7 @@ class SamplePaymentController extends Controller
                 ],
             ]);
             
-            return view('larapaymongo::samplepayment', [ 
+            return view('larapaymongo::payment', [ 
                 'id' => $transaction['id'],
                 'name' => $transaction['name'],
                 'description' => $transaction['description'],

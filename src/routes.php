@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/sample/payment/{referId}', 'PepperTech\LaraPaymongo\SamplePaymentController@index');
-Route::get('/sample/payment/source/{method}/{referId}', 'PepperTech\LaraPaymongo\SamplePaymentSourceController@index');
-Route::get('/sample/payment/verify/{paymentIntentId}', 'PepperTech\LaraPaymongo\SamplePaymentVerifyController@index');
-Route::get('/sample/payment/callback/{referId}', 'PepperTech\LaraPaymongo\SamplePaymentCallbackController@index');
+Route::get('/payment/{referId}', 'PepperTech\LaraPaymongo\PaymentController@index');
+Route::get('/payment/source/{method}/{referId}', 'PepperTech\LaraPaymongo\PaymentSourceController@index');
+Route::get('/payment/verify/{paymentIntentId}', 'PepperTech\LaraPaymongo\PaymentVerifyController@index');
+Route::get('/payment/callback/{referId}', 'PepperTech\LaraPaymongo\PaymentCallbackController@index');

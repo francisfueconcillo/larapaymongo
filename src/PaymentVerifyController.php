@@ -1,14 +1,5 @@
 <?php
 
-/**
- * Verifies card payments and allows execution of other backend tasks to complete the transaction.
- *
- * This is an example for PaymentVerifyController. This will only be available when APP_ENV=local
- */
-
-
-// CHANGE HERE
-// Change this namespace `App\Http\Controllers` when implementing in main app
 namespace PepperTech\LaraPaymongo;
 
 use App\Http\Controllers\Controller;
@@ -17,7 +8,7 @@ use Illuminate\Http\Request;
 use Luigel\Paymongo\Facades\Paymongo;
 use PepperTech\LaraPaymongo\Exceptions\InvalidParameterException;
 
-class SamplePaymentVerifyController extends Controller
+class PaymentVerifyController extends Controller
 {
     private $config;
     
