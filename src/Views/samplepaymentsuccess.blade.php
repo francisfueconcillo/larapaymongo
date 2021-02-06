@@ -13,9 +13,12 @@
     <div class="col-md-7 col-xs-11">
 
       <div class="card">
-          <div class="card-header">Payment successful.</div>
+          <div class="card-header">Payment is done.</div>
           <div class="card-body">
-              ID: {{ $id }}<br/>
+              {{ $name }}<br/>
+              {{ $description }}<br/>
+              Status: {{ $status }}<br/><br/>
+              Price: {{ $currency }} {{ $price }}
           </div>
       </div>   
 

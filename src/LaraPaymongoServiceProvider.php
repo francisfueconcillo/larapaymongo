@@ -29,13 +29,14 @@ class LaraPaymongoServiceProvider extends ServiceProvider
         $this->publishes([ 
             __DIR__ . '/../resources/js/components' => resource_path('js/components'),
             __DIR__ . '/../resources/config/larapaymongo.php' => app()->configPath('larapaymongo.php'),
+            __DIR__ . '/../resources/LaraPaymongoIntegrator.php' => app_path('LaraPaymongoIntegrator.php'),
         ], 'larapaymongo');
 
         $this->mergeConfigFrom(__DIR__ . '/../resources/config/larapaymongo.php', 'larapaymongo');
 
         if (env('APP_ENV') == 'local') {
             $this->loadRoutesFrom(__DIR__.'/routes.php');
-            $this->loadViewsFrom(__DIR__.'/views', 'larapaymongo');
+            $this->loadViewsFrom(__DIR__.'/Views', 'larapaymongo');
         }
     }
 }

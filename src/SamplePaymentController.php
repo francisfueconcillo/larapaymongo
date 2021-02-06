@@ -12,8 +12,10 @@
 namespace PepperTech\LaraPaymongo;
 
 use App\Http\Controllers\Controller;
+use App\LaraPaymongoIntegrator;
 use Illuminate\Http\Request;
 use Luigel\Paymongo\Facades\Paymongo;
+use PepperTech\LaraPaymongo\Exceptions\InvalidParameterException;
 
 class SamplePaymentController extends Controller
 {
@@ -24,51 +26,60 @@ class SamplePaymentController extends Controller
         $this->config = config('larapaymongo');
     }
 
-    public function index($id)
+    /**
+     * @param  String $referId Transaction Reference ID. examples: Order ID or Item ID
+     *
+     * @return View Payment Page view
+     */
+    public function index($referId)
     {
-        /*  
-            $item should be queried from database based on the passed parameter $id.
-            $id can also be an Order ID, in case of multiple items in an order 
-            in most ecommerce implementations.
-        */
+        $transaction = LaraPaymongoIntegrator::getTransactionDetails($referId);
 
-        $item = [
-            'id' => $id,
-            'name' => 'Sample Product '.$id,
-            'description' => 'A very cool product',
-            'price' => 100,
-            'currency' => 'PHP',
-        ];
+        if ($transaction['name'] === null || $transaction['price'] === null || 
+            !in_array($transaction['status'], ['paid', 'unpaid'])) {
+            throw new InvalidParameterException('Invalid or missing parameters.');
+        }
 
-        $itemShortDesc = strtr('(@id) @name', [ 
-            '@id' => $item['id'], 
-            '@name' => $item['name'], 
-        ]);
+        if ($transaction['status'] === 'paid') {
+            return view('larapaymongo::samplepaymentsuccess', [ 
+                'name' => $transaction['name'],
+                'description' => $transaction['description'],
+                'currency' => $transaction['currency'],
+                'price' => strval(number_format($transaction['price'], 2)),
+                'status' => strtoupper($transaction['status']),
+            ]);
+        } else {
 
-        $paymentIntent = Paymongo::paymentIntent()->create([
-            'amount' => number_format($item['price'], 2),  // Amount in cents. https://developers.paymongo.com/reference#create-a-paymentintent
-            'payment_method_allowed' => [
-                'card'
-            ],
-            'payment_method_options' => [
-                'card' => [
-                    'request_three_d_secure' => 'automatic'
-                ]
-            ],
-            'description' => $itemShortDesc,
-            'statement_descriptor' => $this->config['statement_descriptor'],
-            'currency' => 'PHP',  // PayMongo only support PHP at the moment
-            'metadata' => [
-                'reference_id' => $id
-            ],
-        ]);
+            $paymentIntent = Paymongo::paymentIntent()->create([
+                'amount' => number_format($transaction['price'], 2),  // Amount in cents. https://developers.paymongo.com/reference#create-a-paymentintent
+                'payment_method_allowed' => [
+                    'card'
+                ],
+                'payment_method_options' => [
+                    'card' => [
+                        'request_three_d_secure' => 'automatic'
+                    ]
+                ],
+                'description' => $transaction['name'],
+                'statement_descriptor' => $this->config['statement_descriptor'],
+                'currency' => 'PHP',  // PayMongo only support PHP at the moment
+                'metadata' => [
+                    'reference_id' => $referId
+                ],
+            ]);
+            
+            return view('larapaymongo::samplepayment', [ 
+                'id' => $transaction['id'],
+                'name' => $transaction['name'],
+                'description' => $transaction['description'],
+                'currency' => $transaction['currency'],
+                'price' => strval(number_format($transaction['price'], 2)),
+                'status' => strtoupper($transaction['status']),
+                'client_key' => $paymentIntent->client_key,
+                'source_id' => $transaction['source_id'],
+            ]);
+        }
+
         
-        return view('larapaymongo::samplepayment', [ 
-            'name' => $item['name'],
-            'description' => $item['description'],
-            'currency' => $item['currency'],
-            'price' => strval(number_format($item['price'], 2)),
-            'client_key' => $paymentIntent->client_key,
-        ]);
     }
 }

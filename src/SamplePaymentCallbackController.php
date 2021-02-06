@@ -13,9 +13,11 @@
 namespace PepperTech\LaraPaymongo;
 
 use App\Http\Controllers\Controller;
+use App\LaraPaymongoIntegrator;
 use Illuminate\Http\Request;
 use Luigel\Paymongo\Facades\Paymongo;
 use PepperTech\LaraPaymongo\Exceptions\InvalidParameterException;
+use PepperTech\LaraPaymongo\Exceptions\FatalErrorException;
 
 class SamplePaymentCallbackController extends Controller
 {
@@ -31,61 +33,46 @@ class SamplePaymentCallbackController extends Controller
      * Sample Controller for samplepaymentcallback/{method}/{id} route.
      *
      * @param  Illuminate\Http\Request $request
-     * @param  String $result Payment result flag. success|fail
-     * @param  String $id The application's Reference ID for the transaction (not Paymongo's)
+     * @param  String $referId Application's transaction Reference ID
+     *
      * @return JSON JSON object that contains success information or error.
      */
-    public function index(Request $request, $result, $id)
+    public function index(Request $request, $referId)
     {
-        if (! in_array($result, [ 'success', 'fail' ])) {
-            throw new InvalidParameterException('Invalid result string');
-        }
-
-        if ($id === null) {
+        if ($referId === null) {
             throw new InvalidParameterException('Reference ID is missing');
         }
 
-        // TODO - query for source id based from reference id
-        $sourceId = '111';
+        $transaction = LaraPaymongoIntegrator::getTransactionDetails($referId);
 
-        $failView = view('larapaymongo::samplepaymentfail', [ 
-            'id' => $id,
-        ]);
+        if ($transaction['source_id'] === null) {
+            throw new FatalErrorException('Source ID is expected but is not found.');
+        }
 
-        $successView = view('larapaymongo::samplepaymentsuccess', [ 
-            'id' => $id,
-        ]);
+        $failView = view('larapaymongo::samplepaymentfail', $transaction);
+        $successView = view('larapaymongo::samplepaymentsuccess', $transaction);
 
-
-        if ($request === 'success') {
-            $source = Paymongo::source()->find($sourceId);
+        if ($transaction['status'] === 'unpaid') {
+            $source = Paymongo::source()->find($transaction['source_id']);
 
             if ($source->status == 'chargeable') {
-
                 $payment = Paymongo::payment()->create([
                     'amount' => $source->amount,
                     'currency' => $source->currency,
-                    'description' => 'Payment thru '.ucfirst($source->type).': '.$id,
+                    'description' => ucfirst($source->type).' Payment - Ref# '.$referId,
                     'statement_descriptor' => $this->config['statement_descriptor'],
                     'source' => [
-                        'id' => $id,
+                        'id' => $referId,
                         'type' => 'source'
                     ]
                 ]);
 
                 if ($payment->status === 'paid') {
-                    // CHANGE HERE
-                    // The gcash or grab_pay payment was successful.
-                    // Further actions might be needed, like closing an order
-                    // Query the Source ID $id from your database to reference. 
-                    // Source ID must be stored in database during creation of Paymongo Source.
-
+                    LaraPaymongoIntegrator::completeTransaction($referId);
                     return $successView;
                 } else {
                     return $failView;
                 }
-
-               
 
             } else if ($source->status == 'expired') {
                 return $failView;
@@ -93,9 +80,8 @@ class SamplePaymentCallbackController extends Controller
 
             return $failView;
 
-
         } else {
-            return $failView;
+            return $successView;
         }
 
 

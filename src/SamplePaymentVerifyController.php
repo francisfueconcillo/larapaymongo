@@ -12,6 +12,7 @@
 namespace PepperTech\LaraPaymongo;
 
 use App\Http\Controllers\Controller;
+use App\LaraPaymongoIntegrator;
 use Illuminate\Http\Request;
 use Luigel\Paymongo\Facades\Paymongo;
 use PepperTech\LaraPaymongo\Exceptions\InvalidParameterException;
@@ -25,28 +26,24 @@ class SamplePaymentVerifyController extends Controller
         $this->config = config('larapaymongo');
     }
 
-
     /**
-     * @param  Illuminate\Http\Request $request
-     * @param  String $id Payment Intent ID
+     * @param  String $paymentIntentId Payment Intent ID
+     *
      * @return JSON JSON object that contains success flag
      */
-    public function index(Request $request, $id)
+    public function index($paymentIntentId)
     {
-        if ($id === null) {
+        if ($paymentIntentId === null) {
             throw new InvalidParameterException('Payment Intent ID is missing');
         }
 
-        $paymentIntent = Paymongo::paymentIntent()->find($id);
+        $paymentIntent = Paymongo::paymentIntent()->find($paymentIntentId);
         
-        // $referenceId is the ID passed in the metadate Payment Intent was created.
-        $referenceId = $paymentIntent->metadata['reference_id'];
+        // reference_id is the ID passed in the metadata when Payment Intent was created.
+        $referId = $paymentIntent->metadata['reference_id'];
         
         if ($paymentIntent->status == 'succeeded') {
-            // CHANGE HERE
-            // The card payment was successfull
-            // Further actions might be needed, like closing an order
-            // Use the $referenceId as reference to this transaction
+            LaraPaymongoIntegrator::completeTransaction($referId);
         }
 
         $resp = [

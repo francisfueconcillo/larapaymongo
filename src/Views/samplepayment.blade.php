@@ -16,7 +16,8 @@
           <div class="card-header">Product Purchase</div>
           <div class="card-body">
               {{ $name }}<br/>
-              {{ $description }}<br/><br/>
+              {{ $description }}<br/>
+              Status: {{ $status }}<br/><br/>
               Price: {{ $currency }} {{ $price }}
           </div>
       </div>   
@@ -35,13 +36,13 @@
               </li>
               
               <li class="nav-item">
-                <a data-toggle="pill" href="#nav-tab-gcash" class="nav-link rounded-pill disabled" >
+                <a data-toggle="pill" href="#nav-tab-gcash" class="nav-link rounded-pill" >
                   GCash
                 </a>
               </li>
               
               <li class="nav-item">
-                <a data-toggle="pill" href="#nav-tab-grabpay" class="nav-link rounded-pill disabled">
+                <a data-toggle="pill" href="#nav-tab-grabpay" class="nav-link rounded-pill">
                   GrabPay
                 </a>
               </li>
@@ -49,8 +50,8 @@
            
             <div class="tab-content">
               <larapay-card clientkey="{{ $client_key }}"></larapay-card>
-              <larapay-gcash price="{{ $price }}" currency="{{ $currency }}"></larapay-gcash>
-              <larapay-grab price="{{ $price }}" currency="{{ $currency }}"></larapay-grab>
+              <larapay-gcash transactionid="{{ $id }}" price="{{ $price }}" currency="{{ $currency }}"></larapay-gcash>
+              <larapay-grab transactionid="{{ $id }}" price="{{ $price }}" currency="{{ $currency }}"></larapay-grab>
             </div>
         </div>
 

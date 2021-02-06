@@ -83,7 +83,7 @@
                     type="button" 
                     class="subscribe btn btn-primary btn-block rounded-pill shadow-sm"
                     @click="submitHandler"
-                > Confirm  
+                > Pay Now  
                 </button>
             </div>
 
