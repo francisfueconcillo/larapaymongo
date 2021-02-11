@@ -2,7 +2,7 @@
   <button 
     type="button" 
     class="btn btn-primary" 
-    @click="goTo('/purchase/' + itemid)"
+    @click="goTo('/payment/' + referid)"
   >
     Purchase
   </button>
@@ -11,7 +11,7 @@
 <script>
     export default {
       props: {
-        itemid: { type: String, default: null },
+        referid: { type: String, default: null },
       },
       methods: {
         goTo(page) {

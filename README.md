@@ -1,77 +1,75 @@
 # LaraPaymongo
+---
 
-LaraPaymongo is a [PayMongo](https://paymongo.com) integration with Laravel.
-
-## What the library can do
-- Do provide Vue Components that can be used in a Laravel blade view template of the main app.
-- Do Handle frontend and backend calls to PayMongo APIs
-- Do provide API endpoints for PayMongo Webhooks. Used fro GCash and GrabPay payments (not yet implemented)
-
-## What the library won't do
-- Won't provide e-commerce functionalities like Shopping Cart, Order management, Item Inventory management. This should be handled by the main app.
+- [Overview](#overview)
+- [Features](#features)
+- [Installation](#install)
+- [Configuration](#config)
+- [Integration](#integrate)
+- [Testing](#testing)
 
 
+<a name="overview"></a>
+## Overview
+LaraPaymongo is a [PayMongo](https://paymongo.com) integration with Laravel. Paymongo currently supports Credit/Debit Cards (Philippines only), GCash and GrabPay Payments. LaraPaymongo provides an easy way to integrate your Laravel website with Paymongo.
+
+<a name="features"></a>
+## Features
+- Ready-made Payment Pages and Purchase Button UI component
+- Laravel routes, controllers views are ready-made - almost plug-and-play.
+- Developers just need to define their application's logic before and after payments are made.
+
+<a name="install"></a>
 ## Installation
 ```
-composer require peppertech/larapaymongo "^0.1" 
-composer dump-autoload
-php artisan vendor:publish --tag="larapaymongo"
+composer require peppertech/larapaymongo
 ```
-Note:
-
+<a name="config"></a>
 ## Configuration
-- Set the following environment variables
+### Environment variables
 
 Variable | Required | Description | Default Value
 --- | --- | --- | ---
 MIX_PAYMONGO_API_URL | Yes | PayMongo API URL | https://api.paymongo.com/v1
 MIX_PAYMONGO_PUBLIC_KEY | Yes | PayMongo Public Key. Values for Test or Live will be provided. | none
-MIX_PAYMENT_VERIFY_URL | Yes | MUST CHANGE THIS! Callback URL to be called when payment is successful, to perform more backend task like closing an order or sending payment confirmation by email to customer | `/payment/verify` (this default endpoint is only available when `APP_ENV=local`)
 PAYMONGO_STATEMENT_DESCRIPTOR | Yes | The string that will appear on customer Billing Statement. This should be different per project. | none
 PAYMONGO_SECRET_KEY | Yes | PayMongo Secret Key. Values for Test or Live will be provided. | none
 PAYMONGO_PUBLIC_KEY | Yes | PayMongo Public Key. same as MIX_PAYMONGO_PUBLIC_KEY | none
-PAYMONGO_WEBHOOK_SIG | NO for now | PayMongo Webhook Signature. This should be different per project. Generated using PayMongo API only once per project. | none
+PAYMONGO_WEBHOOK_SIG | NO | PayMongo Webhook Signature. This should be different per project. Generated using PayMongo API only once per project. | none
 
+<a name="integrate"></a>
+## Integration
+- Run the followign command to copy VueJS files and the `LaraPaymongoIntegrator` class to the main app
+```
+php artisan vendor:publish --tag="larapaymongo"
+```
 
-## Implementation
-- Create a Route for Purchase Page at `/purchase/[item-id]`
-- Create a View for Purchase Page based from `src/resources/views/samplepurchase.blade.php` file of this package
-- Create a Controller for Purchase Page based from `src/SamplePurchaseController.php` file of this package
-- Create a Route for Payment Callback API endpoint (GET) at `/payment/callback/[Payment Intent id]`. Set this as `MIX_PAYMENT_VERIFY_URL` env variable.
-- Create a Controller for for Payment Callback API endpoint based from `src/SamplePaymentCallbackController.php` file of this package
+### `LaraPaymongoIntegrator` class
+The publish command will copy `LaraPaymongoIntegrator` in `/app` diectory. This class will contain the necessary logic of your application to be ran before and after payment is done by the user.
+- `updateTransactionSourceId()` method is called by LaraPaymongo when Source ID needs to be save in database against the Transaction Reference ID (this could be the Order ID in your application).
+- `getTransactionDetails()` method is called by LaraPaymongo when it needs the Transaction Details for the purchase. This method should query your database to retrive the information.
+- `completeTransaction()` method is called by LaraPaymongo after the payment is successful.
 
-## Available Vue Components
+### Views and Purchase Button
 Vue Components are copied from this package to your app in `resources/js/components`.
+### Purchase Button UI Component
 
-IMPORTANT: Don't modify the `Larapay*.vue` and JS files inside `PayMongo/` directory from the main app. Any changes will be over-written when the library updates by composer. Changes should be made only to this repository and published to [Packgist](https://packagist.org/packages/peppertech/larapaymongo).
-### larapay-btn
-Purchase Button. Clicking this button will redirect user to `/purchase/<itemid>`. The route, view and controller for the Purchase Page must be created in the main app. Check [Implementation Section](#implementation)
+The Purchase Button can be placed anywhere in your app and clicking this button will redirect user to `/payment/<referid>`. Where `referid` is the Transaction Reference ID.
 ```
-<larapay-btn itemid="{{ $itemId }}"></larapay-btn>
+<larapay-btn referid="{{ $referid }}"></larapay-btn>
 ```
-where `itemid` is the Item ID to purchase. This can also be an Order ID, where multiple items can be in one order, like in most e-commerce implementations.
+### Ready-made Routes and Views
+Here are the available routes and views for LaraPaymongo
+- `/payment/<referid>` The Payment Page, where `referid` is the Transaction Reference ID.
+- `/payment/source/{method}/{referId}` URL that gets called to generate a Source ID from Paymongo, when GCash/GrabPay payments are selected, where `method` can be `gcash|grab_pay` and `referId` is the Transaction Reference ID.
+- `/payment/verify/{paymentIntentId}`, callback URL when Card Payment is successful. where `paymentIntentId` is Paymongo Payment Intent ID.
+- `/payment/details/{referId}` callback URL for GCash and GrabPay payments. It can also be used to check the status of the Transaction.
 
-### larapay-card
-Credit/Debit Card Payment Form.
-```
-<larapay-card clientkey="{{ $clientKey }}"></larapay-card>
-```
-where `clientkey` is the PayMongo [Payment Intent](https://developers.paymongo.com/reference#retrieve-a-paymentintent) client_key. 
+**IMPORTANT:** The `Views/payment.blade.php` of this package extends from `view/layouts.app` of your app, so it should exist in your application's views.
 
-### larapay-gcash
-GCash Payment Form (not yet implemented)
-### larapay-grab
-GrabPay Payment Form (not yet implemented)
-
-
-
-
+<a name="testing"></a>
 ## Testing
 
-Sample Purchase Page with the Payment Callback API Endpoint should be available when default values `APP_ENV=local` and  `MIX_PAYMENT_VERIFY_URL` is set to default value.
-
-Go to URL path [your project `url]/samplepurchase/1` . A Sample Purchase Page should appear. After successfull payment GET request to `MIX_PAYMENT_VERIFY_URL` is called.
-
-Use the Test Credit Card numbers from [PayMongo Testing](https://developers.paymongo.com/docs/testing)
-
+- After Installation and Configuration, navigate to `http://<your app domain>/payment/111`, it should show the Payment Page. 
+- Use the Test Credit Card numbers from [PayMongo Testing](https://developers.paymongo.com/docs/testing)
 
