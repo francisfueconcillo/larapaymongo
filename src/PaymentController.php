@@ -33,6 +33,7 @@ class PaymentController extends Controller
 
         if ($transaction['status'] === 'paid') {
             return view('larapaymongo::paymentsuccess', [ 
+                'id' => $transaction['id'],
                 'name' => $transaction['name'],
                 'description' => $transaction['description'],
                 'currency' => $transaction['currency'],

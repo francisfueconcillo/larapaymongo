@@ -154,7 +154,7 @@
             status() {
                 if (this.status === 'success') {
                     // call backend for further actions on the item/order 
-                    LarapayCallback.verify(this.clientkey);
+                    LarapayCallback.verify(this.clientkey, this);
                 }
             }
         },

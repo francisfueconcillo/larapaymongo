@@ -37,12 +37,13 @@ class PaymentSourceController extends Controller
         
         if ($sourceId !== null) {
             $currentSource = Paymongo::source()->find($sourceId);
+            $sourceAttr = $currentSource->getAttributes();
             
             if ($currentSource->status === 'pending') {
                 return json_encode([
                     'code' => 'reuse',
                     'id' => $currentSource->id,
-                    'checkout_url' => $currentSource->attributes->redirect->checkout_url,
+                    'checkout_url' => $sourceAttr['redirect']['checkout_url'],
                 ]);
             } else if ($currentSource->status === 'chargeable') {
                 // should create payment now

@@ -20,7 +20,6 @@ class PaymentDetailsController extends Controller
 
 
     /**
-     * Sample Controller for samplepaymentcallback/{method}/{id} route.
      *
      * @param  Illuminate\Http\Request $request
      * @param  String $referId Application's transaction Reference ID
@@ -39,9 +38,6 @@ class PaymentDetailsController extends Controller
             throw new FatalErrorException('Source ID is expected but is not found.');
         }
 
-        $failView = view('larapaymongo::paymentfail', $transaction);
-        $successView = view('larapaymongo::paymentsuccess', $transaction);
-
         if ($transaction['status'] === 'unpaid') {
             $source = Paymongo::source()->find($transaction['source_id']);
 
@@ -59,52 +55,46 @@ class PaymentDetailsController extends Controller
 
                 if ($payment->status === 'paid') {
                     LaraPaymongoIntegrator::completeTransaction($referId);
-                    return $successView;
-                } else {
-                    return $failView;
+                    $transaction['status'] = 'paid';
+                    return view('larapaymongo::paymentsuccess', $transaction);
                 }
+            }
 
-            } else if ($source->status == 'expired' || $source->status == 'cancelled') {
-                $paymentIntent = Paymongo::paymentIntent()->create([
-                    'amount' => number_format($transaction['price'], 2),  // Amount in cents. https://developers.paymongo.com/reference#create-a-paymentintent
-                    'payment_method_allowed' => [
-                        'card'
-                    ],
-                    'payment_method_options' => [
-                        'card' => [
-                            'request_three_d_secure' => 'automatic'
-                        ]
-                    ],
-                    'description' => $transaction['name'],
-                    'statement_descriptor' => $this->config['statement_descriptor'],
-                    'currency' => 'PHP',  // PayMongo only support PHP at the moment
-                    'metadata' => [
-                        'reference_id' => $referId
-                    ],
-                ]);
+            // payment failed scenarios -  ask user to enter payment details again
+            $paymentIntent = Paymongo::paymentIntent()->create([
+                'amount' => number_format($transaction['price'], 2),  // Amount in cents. https://developers.paymongo.com/reference#create-a-paymentintent
+                'payment_method_allowed' => [
+                    'card'
+                ],
+                'payment_method_options' => [
+                    'card' => [
+                        'request_three_d_secure' => 'automatic'
+                    ]
+                ],
+                'description' => $transaction['name'],
+                'statement_descriptor' => $this->config['statement_descriptor'],
+                'currency' => 'PHP',  // PayMongo only support PHP at the moment
+                'metadata' => [
+                    'reference_id' => $referId
+                ],
+            ]);
 
-                return view('larapaymongo::paymentfail', [ 
-                    'id' => $transaction['id'],
-                    'name' => $transaction['name'],
-                    'description' => $transaction['description'],
-                    'currency' => $transaction['currency'],
-                    'price' => strval(number_format($transaction['price'], 2)),
-                    'status' => strtoupper($transaction['status']),
-                    'client_key' => $paymentIntent->client_key,
-                ]);
-               
-            } 
+            return view('larapaymongo::paymentfail', [ 
+                'id' => $transaction['id'],
+                'name' => $transaction['name'],
+                'description' => $transaction['description'],
+                'currency' => $transaction['currency'],
+                'price' => strval(number_format($transaction['price'], 2)),
+                'status' => strtoupper($transaction['status']),
+                'client_key' => $paymentIntent->client_key,
+            ]); 
 
-            return $failView;
-
-        } else {
-            return $successView;
         }
 
-
-        
-
-        
+        return view('larapaymongo::paymentsuccess', $transaction);
     }
+
+
+    
 
 }
