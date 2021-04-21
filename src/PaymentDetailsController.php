@@ -88,9 +88,9 @@ class PaymentDetailsController extends Controller
                 'status' => strtoupper($transaction['status']),
                 'client_key' => $paymentIntent->client_key,
             ]); 
-
         }
 
+        $transaction['status'] = strtoupper($transaction['status']);
         return view('larapaymongo::paymentsuccess', $transaction);
     }
 

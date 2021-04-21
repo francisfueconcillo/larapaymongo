@@ -29,7 +29,7 @@ class LaraPaymongoIntegrator
    *   id              String. Transaction Reference ID. (Required)
    *   name            String. Short summary of the transaction. (Required)
    *   description     String. Long description of the transaction,
-   *   price           Number. Total price of th transaction. (Required)
+   *   price           Float.  Total price of the transaction. 2 decimal places. (Required)
    *   currency        String. Only 'PHP' is supported at the moment.
    *   status          String. Payment status. Either 'paid' or 'unpaid'
    *   source_id       String. When GCash or Grabpay is selected, this is the ID of the Source Resource
@@ -44,7 +44,7 @@ class LaraPaymongoIntegrator
       'id' => $referId,
       'name' => 'Order Number: '.$referId,
       'description' => 'Order summary here.',
-      'price' => 100,
+      'price' => 100.00,
       'currency' => 'PHP',
       'status' => 'unpaid',
       'source_id' => null,

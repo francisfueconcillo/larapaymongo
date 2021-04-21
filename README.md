@@ -41,7 +41,7 @@ PAYMONGO_WEBHOOK_SIG | NO | PayMongo Webhook Signature. This should be different
 ## Integration
 - Run the followign command to copy VueJS files and the `LaraPaymongoIntegrator` class to the main app
 ```
-php artisan vendor:publish --tag="larapaymongo"
+php artisan vendor:publish --tag="larapaymongo" --force
 ```
 
 ### `LaraPaymongoIntegrator` class
@@ -50,14 +50,8 @@ The publish command will copy `LaraPaymongoIntegrator` in `/app` diectory. This 
 - `getTransactionDetails()` method is called by LaraPaymongo when it needs the Transaction Details for the purchase. This method should query your database to retrive the information.
 - `completeTransaction()` method is called by LaraPaymongo after the payment is successful.
 
-### Views and Purchase Button
+### Vue Components
 Vue Components are copied from this package to your app in `resources/js/components`.
-### Purchase Button UI Component
-
-The Purchase Button can be placed anywhere in your app and clicking this button will redirect user to `/payment/<referid>`. Where `referid` is the Transaction Reference ID.
-```
-<larapay-btn referid="{{ $referid }}"></larapay-btn>
-```
 ### Ready-made Routes and Views
 Here are the available routes and views for LaraPaymongo
 - `/payment/<referid>` The Payment Page, where `referid` is the Transaction Reference ID.

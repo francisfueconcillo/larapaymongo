@@ -76,7 +76,7 @@ class PaymentSourceController extends Controller
         // If Source is not existing or expired, need to create a new one
         $source = Paymongo::source()->create([
             'type' => $method,
-            'amount' => number_format($transaction['price'], 2),
+            'amount' => $transaction['price'],
             'currency' => 'PHP',
             'redirect' => [
                 'success' => config('app.url').'/payment/details/'.$referId,
