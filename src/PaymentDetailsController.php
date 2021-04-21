@@ -62,7 +62,7 @@ class PaymentDetailsController extends Controller
 
             // payment failed scenarios -  ask user to enter payment details again
             $paymentIntent = Paymongo::paymentIntent()->create([
-                'amount' => number_format($transaction['price'], 2),  // Amount in cents. https://developers.paymongo.com/reference#create-a-paymentintent
+                'amount' => $transaction['price'],  // Amount in cents. https://developers.paymongo.com/reference#create-a-paymentintent
                 'payment_method_allowed' => [
                     'card'
                 ],
