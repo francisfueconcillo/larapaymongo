@@ -3,7 +3,7 @@
     "description": "Laravel-Paymongo Payment Integration",
     "type": "library",
     "require": {
-        "luigel/laravel-paymongo": "^1.3",
+        "luigel/laravel-paymongo": "^1.4",
         "laravel/ui": "^2.1"
     },
     "license": "MIT",
